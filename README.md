@@ -56,10 +56,12 @@ sudo apt install postman -y
 
 ## File Uploads
 
+```bash
 Create a directory 'uploads' inside project directory
 Create a directory 'unzipFile' inside project directory
 Create a directory 'DirToBeAnalyzed' inside project directory
 Create a directory 'LintOutputRepository' inside project directory
+```
 
 ## ESLint Installation
 
