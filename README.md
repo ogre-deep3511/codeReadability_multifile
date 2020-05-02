@@ -49,6 +49,7 @@ pip install pylint --upgrade
 
 # Pulling code repo
 git clone https://github.com/Vipul25/CodeReadability.git
+git clone https://github.com/ogre-deep3511/codeReadability_multifile.git
 
 # For verification
 sudo apt install postman -y
