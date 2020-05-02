@@ -1,0 +1,12 @@
+{
+    "extends": "stylelint-config-standard",
+    "rules": {
+        "block-no-empty": true,
+        "max-line-length": 50,
+        "selector-attribute-quotes": "always",
+        "declaration-block-trailing-semicolon": "always",
+        "indentation": 2,
+        "max-empty-lines": 2,
+        "unit-whitelist": ["em", "rem", "%", "s"]
+      }
+}
