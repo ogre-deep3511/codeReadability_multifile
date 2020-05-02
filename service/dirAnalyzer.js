@@ -12,7 +12,6 @@ module.exports = function () {
 
         copyProjectContent: function() {
             var fileLoc = "./unzipFile/" + global.splitFilename[0];
-            // var fileLoc = "./unzipFile";
             global.utility.copyContent(fileLoc);
         },
 
@@ -108,7 +107,11 @@ module.exports = function () {
                             break;
                         case 'html':
                             lang = "html";
-                            tool = "htmlhint";
+                            tool = "HtmlHint";
+                            break;
+                        case 'css':
+                            lang = "css";
+                            tool = "StyleLint";
                             break;
                         default:
 
@@ -160,7 +163,7 @@ module.exports = function () {
                                 //Analyzing the report and generating metrics for calculating readability score.
                                 parsed_output = parseObj.input.split("\n");
                                 for(i=0; i<parsed_output.length; i++) {
-                                    if(parsed_output[i].includes("unused local variable") || parsed_output[i].includes("(unused-variable)") || parsed_output[i].includes("is assigned a value but never used")) {
+                                    if(parsed_output[i].includes("unused local variable") || parsed_output[i].includes("(unused-variable)") || parsed_output[i].includes("is assigned a value but never used" || parsed_output[i].includes("unused parameter")) || parsed_output[i].includes("no-unused-vars")) {
                                         unused_variable += 1;
                                         unused_variable_details.push(parsed_output[i]);
                                     }
@@ -168,31 +171,31 @@ module.exports = function () {
                                         unused_parameter += 1;
                                         unused_parameter_details.push(parsed_output[i]);
                                     }
-                                    else if(parsed_output[i].includes("long line") || parsed_output[i].includes("[LineLength]") || parsed_output.includes("(line-too-long)")) {
+                                    else if(parsed_output[i].includes("long line") || parsed_output[i].includes("[LineLength]") || parsed_output.includes("(line-too-long)") || parsed_output.includes("(max-line-length)") || parsed_output.includes("max-len")) {
                                         line_length += 1;
                                         line_length_details.push(parsed_output[i]);
                                     }
-                                    else if(parsed_output[i].includes("long method") || parsed_output[i].includes("[MethodLength]") || parsed_output[i].includes("(too-many-statements)")) {
+                                    else if(parsed_output[i].includes("long method") || parsed_output[i].includes("[MethodLength]") || parsed_output[i].includes("(too-many-statements)") || parsed_output[i].includes("max-lines-per-function")) {
                                         method_length += 1;
                                         method_length_details.push(parsed_output[i]);
                                     }
-                                    else if(parsed_output[i].includes("too many parameters") || parsed_output[i].includes("[ParameterNumber]") || parsed_output[i].includes("(too-many-arguments)")) {
+                                    else if(parsed_output[i].includes("too many parameters") || parsed_output[i].includes("[ParameterNumber]") || parsed_output[i].includes("(too-many-arguments)") || parsed_output[i].includes("max-params")) {
                                         parameter_number += 1;
                                         parameter_number_details.push(parsed_output[i]);
                                     }
-                                    else if(parsed_output[i].includes("empty") || parsed_output[i].includes("[EmptyBlock]")) {
+                                    else if(parsed_output[i].includes("empty") || parsed_output[i].includes("[EmptyBlock]") || parsed_output[i].includes("no-empty")) {
                                         empty_block += 1;
                                         empty_block_details.push(parsed_output[i]);
                                     }
-                                    else if(parsed_output[i].includes("Expected indentation of 4 spaces but found") || parsed_output[i].includes("Expected indentation of 0 spaces but found")) {
+                                    else if(parsed_output[i].includes("Expected indentation of 4 spaces but found") || parsed_output[i].includes("Expected indentation")) {
                                         indentation += 1;
                                         indentation_details.push(parsed_output[i]);
                                     }
-                                    else if(parsed_output[i].includes("Strings must have singlequote")) {
+                                    else if(parsed_output[i].includes("Strings must use singlequote") || parsed_output[i].includes("selector-attribute-quotes") || parsed_output[i].includes("attr-value-double-quotes")) {
                                         quote += 1;
                                         quote_details.push(parsed_output[i]);
                                     }
-                                    else if(parsed_output[i].includes("Missing semicolon")) {
+                                    else if(parsed_output[i].includes("Missing semicolon") || parsed_output[i].includes("Expected a trailing semicolon")) {
                                         semicolon += 1;
                                         semicolon_details.push(parsed_output[i]);
                                     }
@@ -396,8 +399,11 @@ module.exports = function () {
         },
 
         printReport: function(resultList, res) {
-            // console.log(resultList);
             res.status(200).send(resultList);
+        },
+
+        deleteReport: function() {
+            global.utility.flushReport();
         }
     };
     return obj;
@@ -414,14 +420,9 @@ function getCommand(filePath, fileName, language, dir) {
             command = "oclint -o " + dir + "/" + choppedFileName[0] + "." + append + " " + filePath + " -- -c";
             break;
         case 'cpp':
-            // command = "oclint -o ./" + dir + "/output.txt ./" + filePath + " -- -c";
-            // command = "oclint -o " + dir + "/output.txt" + append + " " + filePath + " -- -c";
             command = "oclint -o " + dir + "/" + choppedFileName[0] + "." + append + " " + filePath + " -- -c";
             break;
         case 'c++':
-            // command = "oclint -o ./" + dir + "/output.txt ./" + filePath + " -- -c";
-            //   command = "oclint -o " + dir + "/output.txt" + append + " " + filePath + " -- -c";
-            // command = "oclint " + filePath + " -- -c";
             command = "oclint -o " + dir + "/" + choppedFileName[0] + "." + append + " " + filePath + " -- -c";
             break;
         case 'java':
@@ -435,6 +436,9 @@ function getCommand(filePath, fileName, language, dir) {
             break;
         case 'html':
             command = "./node_modules/.bin/htmlhint " + filePath + " > " + dir + "/" + choppedFileName[0] + "." + append;
+            break;
+        case 'css':
+            command = "npx stylelint " + filePath + " > " + dir + "/" + choppedFileName[0] + "." + append;
             break;
         default: 
             command = " ";

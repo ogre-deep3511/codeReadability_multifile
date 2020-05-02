@@ -11,19 +11,18 @@ module.exports = function() {
         //     res.send("Successfully unzipped project directory");
         // }
         setTimeout(global.analyze.unzippingProject, 2500);
-        console.log("Completed function 1");
+
         setTimeout(global.analyze.copyProjectContent, 5000);
-        console.log("Completed function 2");
+        
         setTimeout(global.analyze.generateReport, 10000, directory, repository);
-        console.log("Completed function 3");
-        // global.analyze.generateReport(directory, repository);
+        
         setTimeout(global.analyze.parseReport, 20000, repository, resultList, req);
-        console.log("Completed function 4");
+        
         setTimeout(global.analyze.scoreReport, 22000, resultList);
-        console.log("Completed function 5");
 
         setTimeout(global.analyze.printReport, 24000, resultList, res);
-        console.log("Completed function 6");
+        
+        setTimeout(global.analyze.deleteReport, 25000);
     });
 
     

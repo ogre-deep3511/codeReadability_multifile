@@ -28,6 +28,14 @@
         "semi": [
             "error",
             "always"
+        ],
+        "max-params": [
+            "error",
+            3            
+        ],
+        "min": [
+            "error",
+            4
         ]
     }
 }

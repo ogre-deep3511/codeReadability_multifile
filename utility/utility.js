@@ -34,21 +34,18 @@ module.exports = function () {
                     console.log("File copied successfully");
                 }
             });
+        },
 
-            // fs.readdir(Dir, (err, files) => {
-            //     files.forEach(file => {
-            //         cmd = "cp " + Dir + "/" + file + " ./DirToBeAnalyzed";
-
-            //         exec(cmd, (err) => {
-            //             if(err) {
-            //                 throw err;
-            //             }
-            //             else {
-            //                 console.log("File copied successfully");
-            //             }
-            //         });
-            //     });
-            // });
+        flushReport: function() {
+            var cmd = "./delete_script.sh";
+            exec(cmd, (err) => {
+                if(err) {
+                    throw err;
+                }
+                else {
+                    console.log("Files deleted successfully");
+                }
+            });
         }
     };
     return obj;
