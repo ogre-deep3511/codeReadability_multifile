@@ -1,2 +1,9 @@
 .vscode/
 node_modules/
+.installation_script.sh.swp
+DirToBeAnalyzed/
+LintOutputRepository/
+installation_script.sh
+oclint-0.13.1/
+unzipFile/
+uploads/
